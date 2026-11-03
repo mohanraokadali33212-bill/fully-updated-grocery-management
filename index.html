@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grocery & Budget Manager · Household In-Store & Pantry Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --primary: #059669;
+  --primary-d: #047857;
+  --primary-l: #ecfdf5;
+  --primary-border: #a7f3d0;
+  --accent: #f59e0b;
+  --danger: #ef4444;
+  --danger-l: #fef2f2;
+  --danger-border: #fecaca;
+  --warn: #f97316;
+  --warn-l: #fff7ed;
+  --warn-border: #fed7aa;
+  --info: #3b82f6;
+  --info-l: #eff6ff;
+  --ink: #0f172a;
+  --ink-secondary: #334155;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --bg: #f8fafc;
+  --white: #ffffff;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 1.5rem;
+  padding-bottom: 5rem;
+}
+
+h1, h2, h3, h4 { color: var(--ink); font-weight: 700; margin: 0 0 0.5rem; }
+h1 { font-size: 1.75rem; letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.1rem; }
+a { color: var(--primary); text-decoration: none; font-weight: 500; }
+a:hover { color: var(--primary-d); text-decoration: underline; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+.uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+.center { text-align: center; }
+.row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.section-gap { margin-top: 1.5rem; margin-bottom: 1.5rem; }
+
+/* Text colors */
+.text-spent { color: var(--ink); }
+.text-success { color: var(--primary); }
+.text-danger { color: var(--danger); }
+.text-warn { color: var(--warn); }
+.text-info { color: var(--info); }
+.text-lg { font-size: 1.35rem; }
+
+/* Navigation */
+.navbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.nav-brand:hover { text-decoration: none; }
+.brand-icon { font-size: 1.7rem; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-title { font-weight: 800; font-size: 1.1rem; color: var(--primary-d); }
+.brand-sub { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-link {
+  color: var(--ink-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+.nav-link:hover { color: var(--primary); background: var(--primary-l); text-decoration: none; }
+.nav-link.active { color: var(--primary-d); background: var(--primary-l); font-weight: 700; }
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--border);
+}
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-l);
+  color: var(--primary-d);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+.nav-logout-form { margin: 0; }
+.nav-toggle { display: none; background: none; border: 0; font-size: 1.6rem; cursor: pointer; color: var(--ink); }
+
+/* Active Trip Top Notification Bar */
+.active-trip-bar {
+  background: linear-gradient(90deg, #065f46, #047857);
+  color: #fff;
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
+}
+.active-trip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.live-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.4);
+  animation: pulse 1.6s infinite;
+  margin-right: 0.4rem;
+}
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+/* Mobile Bottom Bar (Thumb-friendly) */
+.mobile-bottom-nav { display: none; }
+
+/* Buttons & Badges */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--primary);
+  color: #fff;
+  border: 1.5px solid var(--primary);
+  border-radius: 10px;
+  padding: 0.6rem 1.1rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.btn:hover { background: var(--primary-d); border-color: var(--primary-d); color: #fff; text-decoration: none; }
+.btn-primary { background: var(--primary); }
+.btn-light { background: #fff; color: var(--primary-d); border-color: #fff; }
+.btn-light:hover { background: #f0fdf4; color: var(--primary-d); }
+.btn-ghost { background: transparent; color: var(--ink-secondary); border-color: var(--border); }
+.btn-ghost:hover { background: var(--white); border-color: var(--muted); color: var(--ink); }
+.btn-ghost.danger { color: var(--danger); border-color: var(--danger-border); }
+.btn-ghost.danger:hover { background: var(--danger-l); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger:hover { background: #dc2626; }
+.btn-danger-ghost { background: transparent; color: var(--danger); border-color: var(--danger-border); }
+.btn-danger-ghost:hover { background: var(--danger-l); }
+.btn-sm { padding: 0.35rem 0.75rem; font-size: 0.85rem; border-radius: 8px; }
+.btn-lg { padding: 0.85rem 1.4rem; font-size: 1.05rem; }
+.btn-block { display: flex; width: 100%; }
+.btn-icon { background: none; border: 0; cursor: pointer; font-size: 1.1rem; padding: 0.2rem; border-radius: 6px; }
+.btn-icon:hover { background: var(--border); }
+
+/* Badges & Tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--primary-l);
+  color: var(--primary-d);
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+}
+.badge-pulse {
+  background: #10b981;
+  color: #fff;
+  animation: pulse 1.5s infinite;
+}
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.tag-success { background: var(--primary-l); color: var(--primary-d); }
+.tag-warn { background: var(--warn-l); color: var(--warn); }
+.tag-danger { background: var(--danger-l); color: var(--danger); }
+.tag-info { background: var(--info-l); color: var(--info); }
+.tag-ghost { background: #f1f5f9; color: var(--ink-secondary); }
+
+.store-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  color: var(--ink-secondary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 8px;
+}
+.status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.pill-active { background: #ecfdf5; color: #047857; }
+.pill-completed { background: #f1f5f9; color: #475569; }
+.pill-cancelled { background: #fef2f2; color: #b91c1c; }
+
+/* Cards & Layout */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+/* Forms & Inputs */
+input, select, textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: inherit;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 0.15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+.field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.85rem; }
+.field label { font-size: 0.9rem; font-weight: 600; color: var(--ink-secondary); }
+.field.grow { flex: 1; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+.input-prefix-box { display: flex; align-items: center; position: relative; }
+.input-prefix-box .prefix {
+  position: absolute;
+  left: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.input-prefix-box input { padding-left: 2rem; }
+
+.check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.check-label input { width: auto; margin-top: 0.2rem; }
+.check-label-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem;
+}
+
+/* Store Pill Selector */
+.store-pill-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.store-pill {
+  cursor: pointer;
+  position: relative;
+}
+.store-pill input { display: none; }
+.store-pill span {
+  display: inline-block;
+  padding: 0.45rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+.store-pill input:checked + span {
+  background: var(--primary-l);
+  border-color: var(--primary);
+  color: var(--primary-d);
+  font-weight: 700;
+}
+
+/* Dashboard Styles */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.dash-quick-btns { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+.budget-hero {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 70%);
+  border-color: var(--primary-border);
+  position: relative;
+  overflow: hidden;
+}
+.budget-hero.over {
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 70%);
+  border-color: var(--danger-border);
+}
+.bh-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.bh-metric { display: flex; flex-direction: column; }
+.bh-val { display: flex; align-items: center; gap: 0.4rem; font-size: 1.6rem; font-weight: 800; line-height: 1.2; margin-top: 0.2rem; }
+.pace-badge { font-size: 1rem; font-weight: 700; color: var(--muted); background: var(--bg); padding: 0.2rem 0.6rem; border-radius: 6px; }
+
+.bh-progress-bar {
+  height: 12px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+.bh-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.fill-success { background: var(--primary); }
+.fill-warn { background: var(--warn); }
+.fill-danger { background: var(--danger); }
+.bh-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-budget-box {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border);
+}
+.edit-budget-box .row { max-width: 440px; }
+
+/* Active Trip Spotlight */
+.trip-spotlight {
+  background: #f0fdf4;
+  border: 1.5px solid var(--primary-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.ts-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--primary-d);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+.ts-tally { text-align: right; }
+.ts-amount { display: block; font-size: 1.5rem; font-weight: 800; color: var(--primary-d); }
+.ts-right { display: flex; align-items: center; gap: 1.25rem; }
+
+/* Widgets */
+.widget-box { padding: 1.25rem; }
+.widget-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.store-row { margin-bottom: 0.85rem; }
+.store-label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.25rem; }
+.store-bar { height: 8px; background: var(--bg); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
+.store-bar-fill { height: 100%; background: var(--primary); border-radius: 99px; }
+
+.pantry-alert-list { display: flex; flex-direction: column; gap: 0.65rem; }
+.pantry-alert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.pantry-alert-item.alert-expired { background: var(--danger-l); border-color: var(--danger-border); }
+.pantry-alert-item.alert-expiring_soon { background: var(--warn-l); border-color: var(--warn-border); }
+.pai-info { display: flex; align-items: center; gap: 0.65rem; }
+.pai-icon { font-size: 1.4rem; }
+
+/* Interactive In-Store Trip Screen */
+.trip-hud {
+  position: sticky;
+  top: 74px;
+  z-index: 40;
+  background: #fff;
+  border-width: 2px;
+  margin-bottom: 1.25rem;
+  transition: all 0.2s ease;
+}
+.trip-hud.hud-over {
+  border-color: var(--danger);
+  background: #fffafa;
+}
+.hud-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.hud-title { font-size: 1.4rem; margin: 0; }
+.hud-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.hm-col { display: flex; flex-direction: column; }
+.hm-val { font-size: 1.4rem; font-weight: 800; line-height: 1.2; margin-top: 0.2rem; }
+.hud-progress-wrap { margin-top: 0.5rem; }
+.hud-progress-bar { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.hud-progress-fill { height: 100%; transition: width 0.3s ease; }
+.hud-alert-banner {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--danger-l);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  font-size: 0.88rem;
+  border-radius: 8px;
+}
+
+.quick-add-card { margin-bottom: 1.25rem; }
+.quick-add-form .qaf-row {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.quick-add-form .field { margin-bottom: 0; }
+
+.items-list { display: flex; flex-direction: column; gap: 0.65rem; }
+.item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  transition: all 0.15s ease;
+}
+.item-card.pending {
+  opacity: 0.75;
+  background: #fafafa;
+}
+.ic-left { display: flex; align-items: center; gap: 0.85rem; flex: 1; }
+.ic-right { display: flex; align-items: center; gap: 1rem; }
+.ic-info { display: flex; flex-direction: column; }
+.ic-title-row { display: flex; align-items: center; gap: 0.4rem; }
+.ic-name { font-size: 1.05rem; }
+.ic-cat-icon { font-size: 1.2rem; }
+
+.cart-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+.cart-checkbox input { display: none; }
+.cart-checkbox .checkmark {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+.cart-checkbox input:checked + .checkmark {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.cart-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 8px;
+  top: 4px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+.cart-checkbox input:checked + .checkmark:after { display: block; }
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.qty-stepper button {
+  background: var(--bg);
+  border: 0;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink-secondary);
+}
+.qty-stepper button:hover { background: var(--border); }
+.qty-stepper input {
+  width: 3.2rem;
+  border: 0;
+  text-align: center;
+  padding: 0;
+  font-weight: 700;
+  -moz-appearance: textfield;
+}
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.ic-subtotal { min-width: 75px; text-align: right; font-size: 1.1rem; }
+
+/* Pantry styles */
+.pantry-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+.stat-card b { font-size: 1.4rem; margin-top: 0.2rem; }
+.stat-card.stat-warn { background: var(--warn-l); border-color: var(--warn-border); }
+.stat-card.stat-danger { background: var(--danger-l); border-color: var(--danger-border); }
+.stat-card.stat-info { background: var(--info-l); border-color: #bfdbfe; }
+
+.pantry-tabs { display: flex; flex-direction: column; gap: 0.75rem; }
+.tab-group { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.tab-pill {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: 0.85rem;
+  color: var(--ink-secondary);
+  background: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.tab-pill:hover { background: var(--bg); text-decoration: none; }
+.tab-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab-pill.pill-warn.active { background: var(--warn); border-color: var(--warn); }
+.tab-pill.pill-danger.active { background: var(--danger); border-color: var(--danger); }
+.tab-pill.pill-info.active { background: var(--info); border-color: var(--info); }
+
+.pantry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.pantry-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.pantry-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.pantry-card.card-status-expired { border-color: var(--danger-border); background: #fffcfc; }
+.pantry-card.card-status-expiring_soon { border-color: var(--warn-border); }
+.pc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.pc-icon { font-size: 2rem; }
+.pc-name { font-size: 1.15rem; margin-bottom: 0.2rem; }
+.pc-qty { font-size: 0.95rem; font-weight: 700; color: var(--ink-secondary); margin-bottom: 0.5rem; }
+.pc-expiry { margin-bottom: 0.65rem; }
+.pc-low-alert { margin-bottom: 0.65rem; }
+.pc-footer-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Expenses & Bills */
+.expense-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.expense-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+.ec-store-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem; }
+.ec-notes { margin: 0.2rem 0 0.4rem; font-size: 0.9rem; }
+.ec-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.ec-right { text-align: right; }
+.ec-amount { font-size: 1.4rem; display: block; margin-bottom: 0.4rem; }
+
+.receipt-full-wrap {
+  max-height: 480px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.receipt-full-img { width: 100%; height: auto; object-fit: contain; }
+
+/* Table */
+.table-wrap { overflow-x: auto; background: #fff; border-radius: var(--radius); }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 0.75rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+.table th { background: var(--bg); font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+
+/* Modals */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+.modal[hidden] { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(2px); }
+.modal-box { position: relative; max-width: 480px; width: 100%; z-index: 10; padding: 1.5rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 0.65rem; margin-top: 1.25rem; }
+
+/* Flash & Toasts */
+.flash-messages { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.flash-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+}
+.flash-success { background: var(--primary-l); border-color: var(--primary-border); color: var(--primary-d); }
+.flash-error { background: var(--danger-l); border-color: var(--danger-border); color: #991b1b; }
+.flash-info { background: var(--info-l); border-color: #bfdbfe; color: #1e40af; }
+.flash-close { margin-left: auto; background: none; border: 0; font-size: 1.2rem; cursor: pointer; color: inherit; }
+
+#toasts {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.toast {
+  background: var(--ink);
+  color: #fff;
+  padding: 0.75rem 1.1rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  font-weight: 500;
+  font-size: 0.9rem;
+  animation: slideIn 0.2s ease;
+}
+.toast.success { background: var(--primary-d); }
+.toast.error { background: var(--danger); }
+@keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Hero & Auth */
+.hero-section {
+  text-align: center;
+  max-width: 760px;
+  margin: 2rem auto 3rem;
+}
+.hero-badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  background: var(--primary-l);
+  color: var(--primary-d);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 99px;
+  margin-bottom: 1rem;
+}
+.hero-title { font-size: 2.5rem; line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 1rem; }
+.hero-desc { font-size: 1.15rem; color: var(--muted); margin-bottom: 1.8rem; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+
+.demo-box {
+  background: #f8fafc;
+  border: 1.5px dashed var(--border);
+  padding: 1rem;
+  text-align: left;
+}
+.demo-header { margin-bottom: 0.4rem; }
+.demo-tag { font-weight: 800; font-size: 0.8rem; color: var(--primary-d); text-transform: uppercase; margin-right: 0.4rem; }
+.demo-creds { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; font-size: 0.9rem; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.feature-card { padding: 1.5rem; }
+.feat-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+
+.auth-wrap { max-width: 480px; margin: 1.5rem auto; }
+.form-card { padding: 1.75rem; }
+.form-header { text-align: center; margin-bottom: 1.25rem; }
+.fh-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: inline-block; }
+
+.empty-state { text-align: center; padding: 2.5rem 1rem; }
+.app-footer { border-top: 1px solid var(--border); background: #fff; padding: 1.25rem 0; text-align: center; font-size: 0.85rem; color: var(--muted); margin-top: auto; }
+
+/* Responsive Media Queries */
+@media (max-width: 820px) {
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  .nav-menu.open { display: flex; }
+  .nav-toggle { display: block; }
+  .nav-user { border-left: 0; padding-left: 0; width: 100%; justify-content: space-between; }
+  .grid-2col { grid-template-columns: 1fr; }
+  .hud-metrics { grid-template-columns: 1fr 1fr; }
+  .trip-hud { top: 64px; }
+  
+  /* Supermarket mobile bottom bar */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+    z-index: 60;
+    height: 58px;
+  }
+  .mb-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+  }
+  .mb-item.active { color: var(--primary); }
+  .mb-icon { font-size: 1.2rem; }
+  .mb-item.highlight {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    flex: none;
+    align-self: center;
+    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.4);
+    transform: translateY(-8px);
+  }
+  .mb-item.highlight .mb-icon { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+  .mb-item.highlight .mb-label { display: none; }
+  .mb-badge {
+    position: absolute;
+    top: 8px;
+    right: 24px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+  .main-content { padding-bottom: 6rem; }
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.45rem; }
+  .hero-title { font-size: 1.85rem; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .quick-add-form .qaf-row { flex-direction: column; align-items: stretch; }
+  .quick-add-form .field { width: 100% !important; }
+  .item-card { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .ic-right { justify-content: space-between; border-top: 1px dashed var(--border); padding-top: 0.5rem; }
+}
+
+/* SPA Tab Management */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal styling */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay[hidden] { display: none; }
+.modal-card {
+  background: #fff;
+  border-radius: var(--radius);
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.modal-body { padding: 1.25rem; }
+.modal-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: #f8fafc;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* Image preview in receipt upload */
+.receipt-preview-wrap {
+  position: relative;
+  margin-top: 0.5rem;
+  max-width: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.receipt-preview-wrap img {
+  width: 100%;
+  display: block;
+}
+
+/* Filter pills */
+.filter-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.filter-pill {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  padding: 0.4rem 0.85rem;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.filter-pill:hover { border-color: var(--primary); color: var(--primary); }
+.filter-pill.active { background: var(--primary-l); border-color: var(--primary); color: var(--primary-d); }
+
+</style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="nav-brand" data-tab="dashboard">
+        <span class="brand-icon">🛒</span>
+        <div class="brand-text">
+          <span class="brand-title">Grocery & Budget</span>
+          <span class="brand-sub">Smart Household Manager</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="navMenu">
+        <a href="#dashboard" class="nav-link active" data-tab="dashboard">
+          <span>📊 Dashboard</span>
+        </a>
+        <a href="#trips" class="nav-link" data-tab="trips">
+          <span>🛒 Shopping Trip</span>
+        </a>
+        <a href="#expenses" class="nav-link" data-tab="expenses">
+          <span>🧾 Bills & Expenses</span>
+        </a>
+        <a href="#pantry" class="nav-link" data-tab="pantry">
+          <span>🥫 Pantry & Fridge</span>
+        </a>
+        <a href="#profile" class="nav-link" data-tab="profile">
+          <span>⚙️ Settings</span>
+        </a>
+      </div>
+
+      <div class="nav-user">
+        <div class="user-avatar" title="Logged in as Charan">C</div>
+        <span class="small muted" style="font-weight: 600;">Charan</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Active Trip Notification Banner -->
+  <div id="activeTripBar" class="active-trip-bar" style="display: none;">
+    <div class="container active-trip-inner">
+      <div class="row">
+        <span class="live-dot"></span>
+        <span id="activeTripBarTitle" style="font-weight: 700;">Shopping Trip Active</span>
+        <span id="activeTripBarMetrics" class="row small" style="margin-left: 0.75rem; gap: 0.5rem; opacity: 0.9;"></span>
+      </div>
+      <button class="btn btn-sm btn-light" data-tab="trips">Open Cart →</button>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="main-content container">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: DASHBOARD -->
+    <!-- ========================================== -->
+    <section id="tab-dashboard" class="tab-pane active">
+      
+      <!-- Top Action Bar -->
+      <div class="row between" style="margin-bottom: 1.5rem;">
+        <div>
+          <h1>Household Budget Dashboard</h1>
+          <p class="muted small">Real-time grocery spending, live cart HUD & home pantry freshness.</p>
+        </div>
+        <div class="row" style="gap: 0.5rem;">
+          <button class="btn btn-primary" id="btnOpenStartTrip">🛒 + Start Shopping Trip</button>
+          <button class="btn btn-ghost" id="btnOpenLogExpense">🧾 + Log a Bill</button>
+        </div>
+      </div>
+
+      <!-- Monthly Budget Main Card -->
+      <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem; border-left: 5px solid var(--primary);">
+        <div class="row between" style="margin-bottom: 1rem;">
+          <div>
+            <span class="small muted uppercase" style="font-weight: 700;">Monthly Grocery Budget</span>
+            <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-top: 0.2rem;">
+              <span id="dbTotalSpent" style="font-size: 2.2rem; font-weight: 800; color: var(--ink);">₹0</span>
+              <span class="muted" style="font-size: 1.1rem;">spent of <b id="dbBudgetTarget">₹12,000</b></span>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div id="dbRemaining" style="font-size: 1.25rem; font-weight: 800;">₹0 left</div>
+            <div id="dbPercent" class="small muted">0% used</div>
+          </div>
+        </div>
+
+        <!-- Animated Progress Track -->
+        <div class="progress-track" style="height: 12px; margin-bottom: 0.85rem;">
+          <div id="dbProgressBar" class="progress-bar primary" style="width: 0%;"></div>
+        </div>
+
+        <div class="row between small muted">
+          <span>Daily Pace: <b id="dbDailyPace">₹0/day</b></span>
+          <a href="#profile" data-tab="profile">Edit Budget Target →</a>
+        </div>
+      </div>
+
+      <!-- Quick Pantry Freshness Summary -->
+      <div class="card" style="padding: 1rem 1.25rem; margin-bottom: 1.5rem; background: #fff;">
+        <div class="row between">
+          <div class="row" style="gap: 1rem;">
+            <b>🥫 Pantry Status:</b>
+            <span class="row" style="gap: 0.3rem;"><span class="tag tag-warn">🟠 <b id="dbExpiringBadge">0</b> Expiring Soon</span></span>
+            <span class="row" style="gap: 0.3rem;"><span class="tag tag-danger">🔴 <b id="dbExpiredBadge">0</b> Expired</span></span>
+            <span class="row" style="gap: 0.3rem;"><span class="tag tag-info">⚠️ <b id="dbLowStockBadge">0</b> Running Low</span></span>
+          </div>
+          <a href="#pantry" data-tab="pantry" class="small">Open Fridge & Pantry →</a>
+        </div>
+      </div>
+
+      <!-- 2-Column Analytics Grid -->
+      <div class="grid-2col">
+        <!-- Store Spending Breakdown -->
+        <div class="card">
+          <div class="row between" style="margin-bottom: 1rem;">
+            <h3>🏪 Spending by Store</h3>
+            <span class="small muted">This Month</span>
+          </div>
+          <div id="dbStoreBreakdown">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="card">
+          <div class="row between" style="margin-bottom: 1rem;">
+            <h3>🥗 Spending by Category</h3>
+            <span class="small muted">Breakdown</span>
+          </div>
+          <div id="dbCategoryBreakdown">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Bills -->
+      <div class="section-gap">
+        <div class="row between" style="margin-bottom: 0.75rem;">
+          <h3>🧾 Recent Grocery Bills</h3>
+          <a href="#expenses" data-tab="expenses" class="small">View All Bills →</a>
+        </div>
+        <div id="dbRecentExpenses">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: SHOPPING TRIPS (IN-STORE MODE) -->
+    <!-- ========================================== -->
+    <section id="tab-trips" class="tab-pane">
+      
+      <!-- Section Header -->
+      <div class="row between" style="margin-bottom: 1.25rem;">
+        <div>
+          <h1>🛒 Live Shopping Trip Mode</h1>
+          <p class="muted small">Carry this in the supermarket or delivery app to track cart totals and prevent overspending.</p>
+        </div>
+      </div>
+
+      <!-- ACTIVE TRIP CONTAINER -->
+      <div id="tripActiveSection" style="display: none;">
+        
+        <!-- Sticky Cart HUD -->
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem; border-top: 4px solid var(--primary); background: #fdfdfd;">
+          <div class="row between" style="margin-bottom: 0.75rem;">
+            <div>
+              <span class="badge badge-pulse">● LIVE CART</span>
+              <h2 id="atTripName" style="margin: 0.3rem 0 0;">Shopping Trip</h2>
+              <span class="small muted">Store: <b id="atStore">DMart</b></span>
+            </div>
+            <div style="text-align: right;">
+              <span class="small muted">In Cart Subtotal</span>
+              <div id="atInCart" style="font-size: 1.85rem; font-weight: 800; color: var(--primary);">₹0</div>
+            </div>
+          </div>
+
+          <div class="row between small" style="background: #f8fafc; padding: 0.6rem 0.85rem; border-radius: 8px; border: 1px solid var(--border);">
+            <span>Trip Budget: <b id="atBudget">₹0</b></span>
+            <span>Remaining: <b id="atRemaining">₹0</b></span>
+            <span>Total Planned: <b id="atPlanned">₹0</b></span>
+          </div>
+
+          <!-- Red Alert Bar when Budget Exceeded -->
+          <div id="atOverBudgetAlert" class="card" style="display: none; margin-top: 0.75rem; background: var(--danger-l); border-color: var(--danger-border); color: var(--danger); padding: 0.6rem 1rem;">
+            <b>⚠️ Budget Exceeded!</b> You have exceeded your trip limit. Remove optional items to stay on track.
+          </div>
+        </div>
+
+        <!-- Quick Add Item Form -->
+        <div class="card" style="padding: 1.25rem; margin-bottom: 1.25rem;">
+          <h3 style="margin-bottom: 0.75rem;">+ Add Item to Cart</h3>
+          <form id="quickAddItemForm" class="row" style="align-items: flex-end; gap: 0.6rem;">
+            <div class="field" style="flex: 2; min-width: 150px; margin-bottom: 0;">
+              <label class="small muted">Item Name</label>
+              <input id="qafName" placeholder="e.g. Milk, Onions, Bread" required>
+            </div>
+            <div class="field" style="flex: 1.5; min-width: 130px; margin-bottom: 0;">
+              <label class="small muted">Category</label>
+              <select id="qafCategory">
+                <option value="Vegetables">🥦 Vegetables</option>
+                <option value="Fruits">🍎 Fruits</option>
+                <option value="Dairy & Eggs" selected>🥛 Dairy & Eggs</option>
+                <option value="Grains & Staples">🌾 Grains & Staples</option>
+                <option value="Bakery">🍞 Bakery</option>
+                <option value="Snacks & Beverages">🥤 Snacks & Drinks</option>
+                <option value="Spices & Oils">🧂 Spices & Oils</option>
+                <option value="Other">📦 Other</option>
+              </select>
+            </div>
+            <div class="field" style="flex: 1; min-width: 80px; margin-bottom: 0;">
+              <label class="small muted">Price (₹)</label>
+              <input id="qafPrice" type="number" step="0.5" placeholder="60" required>
+            </div>
+            <div class="field" style="flex: 0.8; min-width: 60px; margin-bottom: 0;">
+              <label class="small muted">Qty</label>
+              <input id="qafQty" type="number" step="0.5" value="1" min="0.1" required>
+            </div>
+            <div class="field" style="flex: 1; min-width: 80px; margin-bottom: 0;">
+              <label class="small muted">Unit</label>
+              <select id="qafUnit">
+                <option value="pack">pack</option>
+                <option value="kg">kg</option>
+                <option value="L">L</option>
+                <option value="pcs">pcs</option>
+                <option value="box">box</option>
+                <option value="bag">bag</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit" style="height: 42px;">Add</button>
+          </form>
+        </div>
+
+        <!-- Checklist of Items in Cart -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+          <div style="padding: 0.85rem 1.25rem; background: #f8fafc; border-bottom: 1px solid var(--border);" class="row between">
+            <b>Items In Basket (Check off as you drop into cart):</b>
+            <span class="small muted">Click checkbox [✓] to verify item</span>
+          </div>
+          <div id="atItemsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Finish / Cancel Trip Actions -->
+        <div class="card" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <b>Done Shopping?</b>
+            <p class="small muted" style="margin: 0.2rem 0 0;">Finishing will log this total into your monthly budget & auto-restock your pantry!</p>
+          </div>
+          <div class="row" style="gap: 0.75rem;">
+            <button class="btn btn-ghost danger" id="btnCancelTrip">Cancel Trip</button>
+            <button class="btn btn-primary btn-lg" id="btnFinishTrip">✓ Finish Shopping Trip</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NO ACTIVE TRIP CONTAINER -->
+      <div id="tripEmptySection" class="card" style="text-align: center; padding: 3rem 1.5rem;">
+        <span style="font-size: 3rem;">🛒</span>
+        <h2>No Active Shopping Trip</h2>
+        <p class="muted" style="max-width: 480px; margin: 0.5rem auto 1.5rem;">
+          Heading to <b>DMart</b>, <b>Reliance</b>, <b>Kirana</b> or opening <b>Blinkit/Zepto</b>? Start a trip to keep your cart within budget!
+        </p>
+        <button class="btn btn-primary btn-lg" onclick="document.getElementById('startTripModal').hidden = false;">
+          + Start New Shopping Trip
+        </button>
+      </div>
+
+      <!-- Past Completed Trips -->
+      <div class="section-gap">
+        <h3 style="margin-bottom: 0.75rem;">📜 Past Completed Trips</h3>
+        <div id="pastTripsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: EXPENSES & BILLS -->
+    <!-- ========================================== -->
+    <section id="tab-expenses" class="tab-pane">
+      
+      <div class="row between" style="margin-bottom: 1.5rem;">
+        <div>
+          <h1>🧾 Grocery Bills & Receipts</h1>
+          <p class="muted small" id="expensesCount">Track store receipts, payments, and photos.</p>
+        </div>
+        <div class="row" style="gap: 0.5rem;">
+          <select id="expenseFilterStore" style="width: auto; height: 42px;">
+            <option value="All">All Stores</option>
+            <option value="DMart">DMart</option>
+            <option value="Blinkit">Blinkit</option>
+            <option value="Zepto">Zepto</option>
+            <option value="Instamart">Instamart</option>
+            <option value="Local Kirana">Local Kirana</option>
+            <option value="Reliance Fresh">Reliance Fresh</option>
+          </select>
+          <button class="btn btn-primary" id="btnOpenLogExpenseModal" onclick="document.getElementById('logExpenseModal').hidden = false;">
+            + Log New Bill
+          </button>
+        </div>
+      </div>
+
+      <!-- Total Expenses Banner -->
+      <div class="card" style="padding: 1rem 1.25rem; margin-bottom: 1.25rem; background: var(--primary-l); border-color: var(--primary-border); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 700; color: var(--primary-d);">Total Logged Spending:</span>
+        <span id="expensesTotalSum" style="font-size: 1.5rem; font-weight: 800; color: var(--primary-d);">₹0</span>
+      </div>
+
+      <!-- Bills List -->
+      <div id="expensesList">
+        <!-- Dynamically populated -->
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: PANTRY & FRIDGE -->
+    <!-- ========================================== -->
+    <section id="tab-pantry" class="tab-pane">
+      
+      <div class="row between" style="margin-bottom: 1.5rem;">
+        <div>
+          <h1>🥫 Household Pantry & Fridge</h1>
+          <p class="muted small" id="pantryTotalCount">Track food inventory and avoid supermarket duplicate purchases.</p>
+        </div>
+        <button class="btn btn-primary" id="btnOpenAddPantryModal" onclick="document.getElementById('addPantryModal').hidden = false;">
+          + Add Food Item
+        </button>
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="filter-pills">
+        <button class="filter-pill active" data-pantry-filter="All">All Items</button>
+        <button class="filter-pill" data-pantry-filter="Fridge">❄️ Fridge</button>
+        <button class="filter-pill" data-pantry-filter="Pantry">🥫 Pantry / Shelf</button>
+        <button class="filter-pill" data-pantry-filter="Freezer">🧊 Freezer</button>
+        <button class="filter-pill" data-pantry-filter="Expiring">🟠 Expiring Soon</button>
+        <button class="filter-pill" data-pantry-filter="LowStock">⚠️ Running Low</button>
+      </div>
+
+      <!-- Pantry Items List -->
+      <div id="pantryList">
+        <!-- Dynamically populated -->
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: PROFILE & SETTINGS -->
+    <!-- ========================================== -->
+    <section id="tab-profile" class="tab-pane">
+      
+      <div class="row between" style="margin-bottom: 1.5rem;">
+        <div>
+          <h1>⚙️ Household Settings & Budget</h1>
+          <p class="muted small">Customize monthly spending targets and application data.</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 600px; padding: 1.5rem;">
+        <form id="profileForm">
+          <div class="field">
+            <label><b>Monthly Grocery Budget (₹)</b></label>
+            <input id="profMonthlyBudget" type="number" step="100" min="0" required>
+            <span class="small muted">This target determines the live progress bars and alert thresholds.</span>
+          </div>
+
+          <div class="field">
+            <label><b>Household Account Name</b></label>
+            <input id="profName" type="text" required>
+          </div>
+
+          <div class="field">
+            <label><b>Email Address</b></label>
+            <input id="profEmail" type="email" required>
+          </div>
+
+          <button class="btn btn-primary btn-block btn-lg" type="submit" style="margin-top: 1rem;">
+            💾 Save Settings
+          </button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+        <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 1rem; border-radius: 10px;">
+          <h4 style="color: var(--danger); margin-bottom: 0.3rem;">Reset Demo Data</h4>
+          <p class="small muted" style="margin-bottom: 0.75rem;">
+            Restore initial supermarket products, active shopping cart, and sample bills anytime.
+          </p>
+          <button class="btn btn-sm btn-danger" id="btnResetData">Restore Demo Data</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <div class="mobile-bottom-nav">
+    <a href="#dashboard" class="mb-item active" data-tab="dashboard">
+      <span class="mb-icon">📊</span>
+      <span class="mb-label">Home</span>
+    </a>
+    <a href="#trips" class="mb-item" data-tab="trips">
+      <span class="mb-icon">🛒</span>
+      <span class="mb-label">Trip</span>
+      <span id="mbTripBadge" class="mb-badge" style="display: none;"></span>
+    </a>
+    <a href="#expenses" class="mb-item" data-tab="expenses">
+      <span class="mb-icon">🧾</span>
+      <span class="mb-label">Bills</span>
+    </a>
+    <a href="#pantry" class="mb-item" data-tab="pantry">
+      <span class="mb-icon">🥫</span>
+      <span class="mb-label">Pantry</span>
+    </a>
+    <a href="#profile" class="mb-item" data-tab="profile">
+      <span class="mb-icon">⚙️</span>
+      <span class="mb-label">Settings</span>
+    </a>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODALS -->
+  <!-- ========================================== -->
+
+  <!-- 1. Start Trip Modal -->
+  <div id="startTripModal" class="modal-overlay" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🛒 Start Shopping Trip</h3>
+        <button class="btn-icon" data-close-modal>✕</button>
+      </div>
+      <form id="startTripForm">
+        <div class="modal-body">
+          <div class="field">
+            <label>Trip Title</label>
+            <input id="stName" value="Weekly Supermarket Run" required>
+          </div>
+          <div class="field">
+            <label>Supermarket / App</label>
+            <select id="stStore">
+              <option value="DMart" selected>DMart</option>
+              <option value="Blinkit">Blinkit</option>
+              <option value="Zepto">Zepto</option>
+              <option value="Instamart">Instamart</option>
+              <option value="Local Kirana">Local Kirana</option>
+              <option value="Reliance Fresh">Reliance Fresh</option>
+              <option value="BigBasket">BigBasket</option>
+              <option value="Nature's Basket">Nature's Basket</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Trip Budget Limit (₹)</label>
+            <input id="stBudget" type="number" value="2500" required>
+            <span class="small muted">You will see a live warning if your cart exceeds this budget.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" type="button" data-close-modal>Cancel</button>
+          <button class="btn btn-primary" type="submit">Start Trip Now →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Log Expense Modal -->
+  <div id="logExpenseModal" class="modal-overlay" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🧾 Log Grocery Bill</h3>
+        <button class="btn-icon" data-close-modal>✕</button>
+      </div>
+      <form id="logExpenseForm">
+        <div class="modal-body">
+          <div class="field">
+            <label>Store Name</label>
+            <select id="expenseStore">
+              <option value="DMart" selected>DMart</option>
+              <option value="Blinkit">Blinkit</option>
+              <option value="Zepto">Zepto</option>
+              <option value="Instamart">Instamart</option>
+              <option value="Local Kirana">Local Kirana</option>
+              <option value="Reliance Fresh">Reliance Fresh</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="grid-2col" style="margin: 0 0 0.85rem;">
+            <div class="field" style="margin-bottom: 0;">
+              <label>Bill Date</label>
+              <input id="expenseDate" type="date" required>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label>Total Amount (₹)</label>
+              <input id="expenseAmount" type="number" step="0.5" placeholder="e.g. 1450" required>
+            </div>
+          </div>
+          <div class="grid-2col" style="margin: 0 0 0.85rem;">
+            <div class="field" style="margin-bottom: 0;">
+              <label>Payment Method</label>
+              <select id="expenseMethod">
+                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
+                <option value="Cash">Cash</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label>Primary Category</label>
+              <select id="expenseCategory">
+                <option value="Grains & Staples">🌾 Grains & Staples</option>
+                <option value="Dairy & Eggs">🥛 Dairy & Eggs</option>
+                <option value="Vegetables">🥦 Vegetables</option>
+                <option value="Bakery">🍞 Bakery</option>
+                <option value="Snacks & Beverages">🥤 Snacks & Beverages</option>
+                <option value="Other" selected>📦 General Grocery</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Notes (Optional)</label>
+            <input id="expenseNotes" placeholder="e.g. Monthly dry fruits and oil">
+          </div>
+          <div class="field">
+            <label>Receipt Photo (Optional)</label>
+            <input id="expenseReceiptInput" type="file" accept="image/*">
+            <div class="receipt-preview-wrap" style="display: none;">
+              <img id="expenseReceiptPreview" alt="Receipt preview">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" type="button" data-close-modal>Cancel</button>
+          <button class="btn btn-primary" type="submit">Save Bill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Add Pantry Item Modal -->
+  <div id="addPantryModal" class="modal-overlay" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🥫 Add Food Item</h3>
+        <button class="btn-icon" data-close-modal>✕</button>
+      </div>
+      <form id="addPantryForm">
+        <div class="modal-body">
+          <div class="field">
+            <label>Item Name</label>
+            <input id="pantryName" placeholder="e.g. Greek Yogurt, Eggs, Atta" required>
+          </div>
+          <div class="grid-2col" style="margin: 0 0 0.85rem;">
+            <div class="field" style="margin-bottom: 0;">
+              <label>Storage Location</label>
+              <select id="pantryLocation">
+                <option value="Fridge" selected>❄️ Fridge</option>
+                <option value="Pantry">🥫 Pantry / Shelf</option>
+                <option value="Freezer">🧊 Freezer</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label>Category</label>
+              <select id="pantryCategory">
+                <option value="Dairy & Eggs" selected>🥛 Dairy & Eggs</option>
+                <option value="Vegetables">🥦 Vegetables</option>
+                <option value="Fruits">🍎 Fruits</option>
+                <option value="Grains & Staples">🌾 Grains & Staples</option>
+                <option value="Bakery">🍞 Bakery</option>
+                <option value="Other">📦 Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2col" style="margin: 0 0 0.85rem;">
+            <div class="field" style="margin-bottom: 0;">
+              <label>Quantity</label>
+              <input id="pantryQty" type="number" value="1" min="0.1" step="0.5" required>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <label>Unit</label>
+              <select id="pantryUnit">
+                <option value="packs">packs</option>
+                <option value="kg">kg</option>
+                <option value="box">box</option>
+                <option value="bottle">bottle</option>
+                <option value="bag">bag</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Expiry Date</label>
+            <input id="pantryExpiryDate" type="date">
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <label class="row" style="cursor: pointer; gap: 0.5rem;">
+              <input id="pantryLowStock" type="checkbox" style="width: 18px; height: 18px;">
+              <span>⚠️ Flag as Running Low (Needs restock soon)</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" type="button" data-close-modal>Cancel</button>
+          <button class="btn btn-primary" type="submit">Add to Inventory</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Zoom Receipt Modal -->
+  <div id="receiptModal" class="modal-overlay" hidden>
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>🧾 Receipt Image</h3>
+        <button class="btn-icon" data-close-modal>✕</button>
+      </div>
+      <div class="modal-body center">
+        <img id="receiptModalImg" style="max-width: 100%; border-radius: 8px;" alt="Receipt">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="button" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toasts" style="position: fixed; bottom: 70px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+
+  <script>
+(function () {
+  'use strict';
+
+  // ==========================================
+  // 1. DEFAULT MOCK DATA & STATE MANAGEMENT
+  // ==========================================
+  const STORAGE_KEY = 'grocery_manager_data_v1';
+
+  const DEFAULT_CATEGORIES = [
+    { id: 'c1', name: 'Vegetables', icon: '🥦' },
+    { id: 'c2', name: 'Fruits', icon: '🍎' },
+    { id: 'c3', name: 'Dairy & Eggs', icon: '🥛' },
+    { id: 'c4', name: 'Grains & Staples', icon: '🌾' },
+    { id: 'c5', name: 'Bakery', icon: '🍞' },
+    { id: 'c6', name: 'Snacks & Beverages', icon: '🥤' },
+    { id: 'c7', name: 'Meat & Seafood', icon: '🍗' },
+    { id: 'c8', name: 'Spices & Oils', icon: '🧂' },
+    { id: 'c9', name: 'Household & Hygiene', icon: '🧴' },
+    { id: 'c10', name: 'Other', icon: '📦' }
+  ];
+
+  function getTodayStr(offsetDays = 0) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d.toISOString().split('T')[0];
+  }
+
+  const DEFAULT_STATE = {
+    budget: 12000,
+    currency: '₹',
+    user: {
+      name: 'Charan',
+      email: 'customer@example.com'
+    },
+    categories: DEFAULT_CATEGORIES,
+    activeTrip: {
+      id: 'trip-101',
+      name: 'Weekend Supermarket Run',
+      store: 'DMart',
+      budget: 3000,
+      status: 'active',
+      date: getTodayStr(),
+      items: [
+        { id: 'ti-1', name: 'Amul Taaza Milk (1L)', category: 'Dairy & Eggs', price: 68, qty: 2, unit: 'packs', inCart: true },
+        { id: 'ti-2', name: 'Whole Wheat Bread', category: 'Bakery', price: 45, qty: 1, unit: 'pack', inCart: true },
+        { id: 'ti-3', name: 'Farm Fresh Eggs (12pk)', category: 'Dairy & Eggs', price: 95, qty: 1, unit: 'box', inCart: true },
+        { id: 'ti-4', name: 'Basmati Rice (5kg)', category: 'Grains & Staples', price: 420, qty: 1, unit: 'bag', inCart: false },
+        { id: 'ti-5', name: 'Fresh Potatoes (2kg)', category: 'Vegetables', price: 60, qty: 1, unit: 'kg', inCart: true }
+      ]
+    },
+    pastTrips: [
+      { id: 'pt-1', name: 'Quick Mid-Week Run', store: 'Blinkit', budget: 1000, totalCost: 740, date: getTodayStr(-3), itemCount: 4 }
+    ],
+    expenses: [
+      { id: 'exp-1', store: 'DMart', date: getTodayStr(-2), amount: 2450, method: 'UPI', notes: 'Monthly staples & household snacks', receiptImage: null, category: 'Grains & Staples' },
+      { id: 'exp-2', store: 'Blinkit', date: getTodayStr(-1), amount: 480, method: 'UPI', notes: 'Quick breakfast delivery', receiptImage: null, category: 'Dairy & Eggs' },
+      { id: 'exp-3', store: 'Local Kirana', date: getTodayStr(-5), amount: 850, method: 'Cash', notes: 'Spices, tea, and sugar', receiptImage: null, category: 'Spices & Oils' }
+    ],
+    pantry: [
+      { id: 'p-1', name: 'Amul Taaza Milk', category: 'Dairy & Eggs', location: 'Fridge', qty: 2, unit: 'packs', expiryDate: getTodayStr(2), isLowStock: false },
+      { id: 'p-2', name: 'Whole Wheat Bread', category: 'Bakery', location: 'Pantry', qty: 1, unit: 'pack', expiryDate: getTodayStr(3), isLowStock: false },
+      { id: 'p-3', name: 'Basmati Rice (5kg)', category: 'Grains & Staples', location: 'Pantry', qty: 1, unit: 'bag', expiryDate: getTodayStr(120), isLowStock: false },
+      { id: 'p-4', name: 'Fresh Tomatoes', category: 'Vegetables', location: 'Fridge', qty: 1, unit: 'kg', expiryDate: getTodayStr(1), isLowStock: true },
+      { id: 'p-5', name: 'Amul Butter (500g)', category: 'Dairy & Eggs', location: 'Fridge', qty: 1, unit: 'pack', expiryDate: getTodayStr(25), isLowStock: false },
+      { id: 'p-6', name: 'Green Peas (Frozen)', category: 'Vegetables', location: 'Freezer', qty: 1, unit: 'pack', expiryDate: getTodayStr(90), isLowStock: false }
+    ]
+  };
+
+  let state = loadState();
+
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to load state from localStorage', e);
+    }
+    return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('Failed to save state to localStorage', e);
+    }
+    renderApp();
+  }
+
+  // ==========================================
+  // 2. HELPERS & FORMATTERS
+  // ==========================================
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  function money(n) {
+    n = Number(n) || 0;
+    const cur = state.currency || '₹';
+    return cur + (Number.isInteger(n)
+      ? n.toLocaleString('en-IN')
+      : n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  }
+
+  function showToast(msg, type = 'success') {
+    const box = $('#toasts');
+    if (!box) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    box.appendChild(el);
+    setTimeout(() => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(10px)';
+      setTimeout(() => el.remove(), 250);
+    }, 3200);
+  }
+
+  function getDaysUntil(dateStr) {
+    if (!dateStr) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(dateStr);
+    target.setHours(0, 0, 0, 0);
+    const diff = Math.round((target - today) / (1000 * 60 * 60 * 24));
+    return diff;
+  }
+
+  function getExpiryStatus(dateStr) {
+    const days = getDaysUntil(dateStr);
+    if (days === null) return { status: 'none', label: 'No date', class: 'tag-ghost' };
+    if (days < 0) return { status: 'expired', label: `Expired (${Math.abs(days)}d ago)`, class: 'tag-danger' };
+    if (days <= 3) return { status: 'expiring_soon', label: `Expiring (${days}d left)`, class: 'tag-warn' };
+    return { status: 'good', label: `Fresh (${days}d left)`, class: 'tag-success' };
+  }
+
+  // ==========================================
+  // 3. TAB NAVIGATION
+  // ==========================================
+  function switchTab(tabId) {
+    $$('.tab-pane').forEach(el => el.classList.remove('active'));
+    $$('.nav-link').forEach(el => el.classList.remove('active'));
+    $$('.mb-item').forEach(el => el.classList.remove('active'));
+
+    const targetPane = $('#tab-' + tabId);
+    if (targetPane) targetPane.classList.add('active');
+
+    const topLink = $(`.nav-link[data-tab="${tabId}"]`);
+    if (topLink) topLink.classList.add('active');
+
+    const bottomLink = $(`.mb-item[data-tab="${tabId}"]`);
+    if (bottomLink) bottomLink.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ==========================================
+  // 4. RENDERING FUNCTIONS
+  // ==========================================
+  function renderApp() {
+    renderTopHUD();
+    renderDashboard();
+    renderTrips();
+    renderExpenses();
+    renderPantry();
+    renderProfile();
+  }
+
+  function renderTopHUD() {
+    const topBar = $('#activeTripBar');
+    const bottomBadge = $('#mbTripBadge');
+    if (!topBar) return;
+
+    if (state.activeTrip) {
+      topBar.style.display = 'block';
+      const inCartTotal = state.activeTrip.items
+        .filter(i => i.inCart)
+        .reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const remaining = Math.max(0, state.activeTrip.budget - inCartTotal);
+
+      $('#activeTripBarTitle').textContent = `${state.activeTrip.name} (${state.activeTrip.store})`;
+      $('#activeTripBarMetrics').innerHTML = `
+        <span>In Cart: <b>${money(inCartTotal)}</b></span>
+        <span>•</span>
+        <span>Remaining: <b>${money(remaining)}</b></span>
+      `;
+      if (bottomBadge) bottomBadge.style.display = 'block';
+    } else {
+      topBar.style.display = 'none';
+      if (bottomBadge) bottomBadge.style.display = 'none';
+    }
+  }
+
+  // ---------- A. DASHBOARD ----------
+  function renderDashboard() {
+    const totalSpent = state.expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+    const budget = Number(state.budget) || 12000;
+    const remaining = budget - totalSpent;
+    const percent = budget > 0 ? Math.min(100, Math.round((totalSpent / budget) * 100)) : 0;
+    const isOver = totalSpent > budget;
+
+    // Monthly Budget Card
+    $('#dbTotalSpent').textContent = money(totalSpent);
+    $('#dbBudgetTarget').textContent = money(budget);
+    $('#dbRemaining').textContent = isOver ? `Exceeded by ${money(totalSpent - budget)}` : `${money(remaining)} left`;
+    $('#dbRemaining').className = isOver ? 'text-danger' : 'text-success';
+    $('#dbPercent').textContent = percent + '% used';
+
+    const pBar = $('#dbProgressBar');
+    if (pBar) {
+      pBar.style.width = percent + '%';
+      pBar.className = 'progress-bar ' + (isOver ? 'danger' : percent > 80 ? 'warn' : 'primary');
+    }
+
+    // Daily pace
+    const now = new Date();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const curDay = now.getDate();
+    const pace = curDay > 0 ? (totalSpent / curDay).toFixed(0) : 0;
+    const projected = (pace * daysInMonth).toFixed(0);
+    $('#dbDailyPace').textContent = `${money(pace)}/day (Projected: ${money(projected)})`;
+
+    // Pantry stat pills
+    const expiringCount = state.pantry.filter(p => getExpiryStatus(p.expiryDate).status === 'expiring_soon').length;
+    const expiredCount = state.pantry.filter(p => getExpiryStatus(p.expiryDate).status === 'expired').length;
+    const lowStockCount = state.pantry.filter(p => p.isLowStock).length;
+
+    $('#dbExpiringBadge').textContent = expiringCount;
+    $('#dbExpiredBadge').textContent = expiredCount;
+    $('#dbLowStockBadge').textContent = lowStockCount;
+
+    // Store breakdown
+    const storeMap = {};
+    state.expenses.forEach(e => {
+      storeMap[e.store] = (storeMap[e.store] || 0) + Number(e.amount);
+    });
+    const storeContainer = $('#dbStoreBreakdown');
+    if (storeContainer) {
+      if (Object.keys(storeMap).length === 0) {
+        storeContainer.innerHTML = '<p class="muted small center">No expenses logged yet.</p>';
+      } else {
+        const sortedStores = Object.entries(storeMap).sort((a, b) => b[1] - a[1]);
+        storeContainer.innerHTML = sortedStores.map(([store, amt]) => {
+          const stPct = totalSpent > 0 ? Math.round((amt / totalSpent) * 100) : 0;
+          return `
+            <div class="store-row" style="margin-bottom: 0.75rem;">
+              <div class="row between small" style="margin-bottom: 0.25rem;">
+                <b>${store}</b>
+                <span>${money(amt)} (${stPct}%)</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar primary" style="width: ${stPct}%;"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Category breakdown
+    const catMap = {};
+    state.expenses.forEach(e => {
+      const cat = e.category || 'Other';
+      catMap[cat] = (catMap[cat] || 0) + Number(e.amount);
+    });
+    const catContainer = $('#dbCategoryBreakdown');
+    if (catContainer) {
+      if (Object.keys(catMap).length === 0) {
+        catContainer.innerHTML = '<p class="muted small center">No category data yet.</p>';
+      } else {
+        const sortedCats = Object.entries(catMap).sort((a, b) => b[1] - a[1]);
+        catContainer.innerHTML = sortedCats.map(([cat, amt]) => {
+          const cPct = totalSpent > 0 ? Math.round((amt / totalSpent) * 100) : 0;
+          return `
+            <div class="cat-row" style="margin-bottom: 0.75rem;">
+              <div class="row between small" style="margin-bottom: 0.25rem;">
+                <span>${cat}</span>
+                <span>${money(amt)} (${cPct}%)</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar warn" style="width: ${cPct}%;"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Recent Expenses
+    const recentBox = $('#dbRecentExpenses');
+    if (recentBox) {
+      if (state.expenses.length === 0) {
+        recentBox.innerHTML = '<p class="muted small center">No bills recorded this month.</p>';
+      } else {
+        recentBox.innerHTML = state.expenses.slice(0, 5).map(e => `
+          <div class="card" style="padding: 0.75rem 1rem; margin-bottom: 0.6rem; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span class="store-badge">${e.store}</span>
+              <span class="small muted" style="margin-left: 0.5rem;">${e.date} • ${e.method}</span>
+              ${e.notes ? `<p class="small muted" style="margin: 0.2rem 0 0;">${e.notes}</p>` : ''}
+            </div>
+            <div style="text-align: right;">
+              <span style="font-weight: 700; font-size: 1.05rem;">${money(e.amount)}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+  }
+
+  // ---------- B. SHOPPING TRIPS ----------
+  function renderTrips() {
+    const activeSection = $('#tripActiveSection');
+    const emptySection = $('#tripEmptySection');
+    const pastSection = $('#pastTripsList');
+
+    if (state.activeTrip) {
+      if (activeSection) activeSection.style.display = 'block';
+      if (emptySection) emptySection.style.display = 'none';
+
+      const trip = state.activeTrip;
+      const inCartTotal = trip.items.filter(i => i.inCart).reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const plannedTotal = trip.items.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      const remaining = trip.budget - inCartTotal;
+      const isOver = inCartTotal > trip.budget;
+      const percent = trip.budget > 0 ? Math.min(100, Math.round((inCartTotal / trip.budget) * 100)) : 0;
+
+      $('#atTripName').textContent = trip.name;
+      $('#atStore').textContent = trip.store;
+      $('#atInCart').textContent = money(inCartTotal);
+      $('#atBudget').textContent = money(trip.budget);
+      $('#atRemaining').textContent = isOver ? `Over by ${money(inCartTotal - trip.budget)}` : money(remaining);
+      $('#atRemaining').className = isOver ? 'text-danger' : 'text-success';
+      $('#atPlanned').textContent = money(plannedTotal);
+
+      // Warning alert
+      const overAlert = $('#atOverBudgetAlert');
+      if (overAlert) overAlert.style.display = isOver ? 'block' : 'none';
+
+      // Items list
+      const itemsContainer = $('#atItemsList');
+      if (itemsContainer) {
+        if (trip.items.length === 0) {
+          itemsContainer.innerHTML = '<p class="muted center" style="padding: 2rem 0;">No items in this trip yet. Use the quick add form below!</p>';
+        } else {
+          itemsContainer.innerHTML = trip.items.map((item, idx) => `
+            <div class="item-card ${item.inCart ? 'in-cart' : ''}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: ${item.inCart ? '#f0fdf4' : '#fff'};">
+              <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                <input type="checkbox" ${item.inCart ? 'checked' : ''} onchange="window.toggleTripItem('${item.id}')" style="width: 20px; height: 20px; cursor: pointer;">
+                <div>
+                  <b style="${item.inCart ? 'text-decoration: line-through; color: var(--muted);' : ''}">${item.name}</b>
+                  <div class="small muted">${item.category} • ${money(item.price)}/${item.unit}</div>
+                </div>
+              </div>
+              <div class="ic-right" style="display: flex; align-items: center; gap: 1rem;">
+                <div class="row" style="gap: 0.3rem;">
+                  <button class="btn btn-sm btn-ghost" onclick="window.updateTripItemQty('${item.id}', -1)" style="padding: 0.2rem 0.5rem;">-</button>
+                  <span style="font-weight: 600; min-width: 24px; text-align: center;">${item.qty}</span>
+                  <button class="btn btn-sm btn-ghost" onclick="window.updateTripItemQty('${item.id}', 1)" style="padding: 0.2rem 0.5rem;">+</button>
+                </div>
+                <span style="font-weight: 700; min-width: 65px; text-align: right;">${money(item.price * item.qty)}</span>
+                <button class="btn-icon" onclick="window.deleteTripItem('${item.id}')" title="Remove" style="color: var(--danger);">🗑️</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    } else {
+      if (activeSection) activeSection.style.display = 'none';
+      if (emptySection) emptySection.style.display = 'block';
+    }
+
+    // Past Trips
+    if (pastSection) {
+      if (!state.pastTrips || state.pastTrips.length === 0) {
+        pastSection.innerHTML = '<p class="muted small center">No completed shopping trips yet.</p>';
+      } else {
+        pastSection.innerHTML = state.pastTrips.map(pt => `
+          <div class="card" style="padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <b>${pt.name}</b>
+              <div class="small muted">${pt.store} • ${pt.date} • ${pt.itemCount} items</div>
+            </div>
+            <div style="text-align: right;">
+              <span class="status-pill pill-completed">Completed</span>
+              <div style="font-weight: 700; font-size: 1.05rem; margin-top: 0.2rem;">${money(pt.totalCost)}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+  }
+
+  // ---------- C. EXPENSES & BILLS ----------
+  function renderExpenses() {
+    const list = $('#expensesList');
+    if (!list) return;
+
+    const filterStore = $('#expenseFilterStore') ? $('#expenseFilterStore').value : 'All';
+    let filtered = state.expenses;
+    if (filterStore && filterStore !== 'All') {
+      filtered = filtered.filter(e => e.store === filterStore);
+    }
+
+    $('#expensesCount').textContent = `${filtered.length} bills recorded`;
+    const total = filtered.reduce((s, e) => s + Number(e.amount), 0);
+    $('#expensesTotalSum').textContent = money(total);
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<p class="muted center" style="padding: 2.5rem 0;">No bills match this filter. Log your supermarket bills above!</p>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(e => `
+      <div class="card" style="padding: 1rem 1.25rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          ${e.receiptImage ? `
+            <img src="${e.receiptImage}" onclick="window.viewReceiptImage('${e.receiptImage}')" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border);" title="Click to view receipt">
+          ` : `
+            <div style="width: 50px; height: 50px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">🧾</div>
+          `}
+          <div>
+            <div class="row" style="gap: 0.5rem; margin-bottom: 0.2rem;">
+              <b>${e.store}</b>
+              <span class="tag tag-ghost">${e.method}</span>
+              ${e.category ? `<span class="tag tag-info">${e.category}</span>` : ''}
+            </div>
+            <div class="small muted">${e.date} ${e.notes ? `• ${e.notes}` : ''}</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <b style="font-size: 1.15rem;">${money(e.amount)}</b>
+          <button class="btn-icon" onclick="window.deleteExpense('${e.id}')" title="Delete Bill" style="color: var(--danger);">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ---------- D. PANTRY & FRIDGE ----------
+  let pantryFilter = 'All';
+
+  function renderPantry() {
+    const list = $('#pantryList');
+    if (!list) return;
+
+    let items = state.pantry;
+    if (pantryFilter === 'Fridge' || pantryFilter === 'Pantry' || pantryFilter === 'Freezer') {
+      items = items.filter(p => p.location === pantryFilter);
+    } else if (pantryFilter === 'LowStock') {
+      items = items.filter(p => p.isLowStock);
+    } else if (pantryFilter === 'Expiring') {
+      items = items.filter(p => ['expiring_soon', 'expired'].includes(getExpiryStatus(p.expiryDate).status));
+    }
+
+    $('#pantryTotalCount').textContent = `${items.length} items found`;
+
+    if (items.length === 0) {
+      list.innerHTML = '<p class="muted center" style="padding: 2.5rem 0;">No items found in this section. Add groceries to keep track of freshness!</p>';
+      return;
+    }
+
+    list.innerHTML = items.map(p => {
+      const exp = getExpiryStatus(p.expiryDate);
+      const locIcon = p.location === 'Fridge' ? '❄️ Fridge' : p.location === 'Freezer' ? '🧊 Freezer' : '🥫 Pantry';
+
+      return `
+        <div class="card" style="padding: 1rem 1.25rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: #f8fafc; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+              ${p.location === 'Fridge' ? '❄️' : p.location === 'Freezer' ? '🧊' : '🥫'}
+            </div>
+            <div>
+              <div class="row" style="gap: 0.4rem; margin-bottom: 0.2rem;">
+                <b>${p.name}</b>
+                ${p.isLowStock ? '<span class="tag tag-warn">⚠️ Running Low</span>' : ''}
+              </div>
+              <div class="small muted">
+                <span class="store-badge" style="font-size: 0.72rem; padding: 0.1rem 0.4rem;">${locIcon}</span>
+                <span style="margin: 0 0.3rem;">•</span>
+                ${p.category} • Qty: <b>${p.qty} ${p.unit}</b>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="tag ${exp.class}">${exp.label}</span>
+            <button class="btn btn-sm btn-ghost" onclick="window.addPantryItemToTrip('${p.name}', '${p.category}')" title="Add to shopping trip" style="color: var(--primary);">
+              🛒 +Add to Trip
+            </button>
+            <div class="row" style="gap: 0.2rem;">
+              <button class="btn btn-sm btn-ghost" onclick="window.updatePantryQty('${p.id}', -1)" style="padding: 0.2rem 0.5rem;">-</button>
+              <button class="btn btn-sm btn-ghost" onclick="window.updatePantryQty('${p.id}', 1)" style="padding: 0.2rem 0.5rem;">+</button>
+            </div>
+            <button class="btn-icon" onclick="window.deletePantryItem('${p.id}')" title="Delete Item" style="color: var(--danger);">🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ---------- E. PROFILE & SETTINGS ----------
+  function renderProfile() {
+    const budgetInput = $('#profMonthlyBudget');
+    if (budgetInput && !budgetInput.matches(':focus')) {
+      budgetInput.value = state.budget;
+    }
+    const nameInput = $('#profName');
+    if (nameInput) nameInput.value = state.user.name;
+    const emailInput = $('#profEmail');
+    if (emailInput) emailInput.value = state.user.email;
+  }
+
+  // ==========================================
+  // 5. GLOBAL WINDOW ACTION HANDLERS
+  // ==========================================
+
+  // Tab switching
+  window.goToTab = function (tabId) {
+    switchTab(tabId);
+  };
+
+  // Trip item toggle checkbox
+  window.toggleTripItem = function (itemId) {
+    if (!state.activeTrip) return;
+    const item = state.activeTrip.items.find(i => i.id === itemId);
+    if (item) {
+      item.inCart = !item.inCart;
+      saveState();
+      showToast(item.inCart ? `Checked "${item.name}" into cart [✓]` : `Unchecked "${item.name}"`, 'info');
+    }
+  };
+
+  // Trip item quantity adjustment
+  window.updateTripItemQty = function (itemId, delta) {
+    if (!state.activeTrip) return;
+    const item = state.activeTrip.items.find(i => i.id === itemId);
+    if (item) {
+      item.qty = Math.max(1, item.qty + delta);
+      saveState();
+    }
+  };
+
+  // Delete trip item
+  window.deleteTripItem = function (itemId) {
+    if (!state.activeTrip) return;
+    state.activeTrip.items = state.activeTrip.items.filter(i => i.id !== itemId);
+    saveState();
+    showToast('Item removed from trip.', 'info');
+  };
+
+  // Add Pantry item directly to shopping trip
+  window.addPantryItemToTrip = function (itemName, category) {
+    if (!state.activeTrip) {
+      // Auto-create active trip
+      state.activeTrip = {
+        id: 'trip-' + Date.now(),
+        name: 'Grocery Restock',
+        store: 'DMart',
+        budget: 2000,
+        status: 'active',
+        date: getTodayStr(),
+        items: []
+      };
+    }
+    const newItem = {
+      id: 'ti-' + Date.now(),
+      name: itemName,
+      category: category || 'Grains & Staples',
+      price: 50,
+      qty: 1,
+      unit: 'pack',
+      inCart: false
+    };
+    state.activeTrip.items.push(newItem);
+    saveState();
+    showToast(`Added "${itemName}" to your Shopping Trip! 🛒`);
+    switchTab('trips');
+  };
+
+  // Pantry item quantity
+  window.updatePantryQty = function (pantryId, delta) {
+    const item = state.pantry.find(p => p.id === pantryId);
+    if (item) {
+      item.qty = Math.max(0, item.qty + delta);
+      if (item.qty === 0) item.isLowStock = true;
+      saveState();
+    }
+  };
+
+  // Delete pantry item
+  window.deletePantryItem = function (pantryId) {
+    state.pantry = state.pantry.filter(p => p.id !== pantryId);
+    saveState();
+    showToast('Pantry item removed.', 'info');
+  };
+
+  // Delete expense
+  window.deleteExpense = function (expId) {
+    state.expenses = state.expenses.filter(e => e.id !== expId);
+    saveState();
+    showToast('Bill removed from expense log.', 'info');
+  };
+
+  // View receipt modal
+  window.viewReceiptImage = function (imgUrl) {
+    const modal = $('#receiptModal');
+    const img = $('#receiptModalImg');
+    if (modal && img) {
+      img.src = imgUrl;
+      modal.hidden = false;
+    }
+  };
+
+  // ==========================================
+  // 6. FORM & MODAL LISTENERS
+  // ==========================================
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Tab Links
+    $$('[data-tab]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const tab = btn.getAttribute('data-tab');
+        switchTab(tab);
+      });
+    });
+
+    // Close modals
+    $$('[data-close-modal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        $$('.modal-overlay').forEach(m => m.hidden = true);
+      });
+    });
+
+    // Pantry filter pills
+    $$('.filter-pill[data-pantry-filter]').forEach(pill => {
+      pill.addEventListener('click', () => {
+        $$('.filter-pill[data-pantry-filter]').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        pantryFilter = pill.getAttribute('data-pantry-filter');
+        renderPantry();
+      });
+    });
+
+    // Expense Store Filter
+    const expStoreFilter = $('#expenseFilterStore');
+    if (expStoreFilter) {
+      expStoreFilter.addEventListener('change', renderExpenses);
+    }
+
+    // --- Start Trip Modal & Form ---
+    $('#btnOpenStartTrip')?.addEventListener('click', () => {
+      $('#startTripModal').hidden = false;
+    });
+
+    $('#startTripForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = $('#stName').value.trim() || 'Supermarket Trip';
+      const store = $('#stStore').value.trim() || 'DMart';
+      const budget = parseFloat($('#stBudget').value) || 2000;
+
+      state.activeTrip = {
+        id: 'trip-' + Date.now(),
+        name: name,
+        store: store,
+        budget: budget,
+        status: 'active',
+        date: getTodayStr(),
+        items: []
+      };
+
+      saveState();
+      $('#startTripModal').hidden = true;
+      showToast(`Shopping Trip "${name}" started! 🛒`);
+      switchTab('trips');
+    });
+
+    // --- Quick Add Trip Item Form ---
+    $('#quickAddItemForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!state.activeTrip) return;
+
+      const name = $('#qafName').value.trim();
+      const category = $('#qafCategory').value;
+      const price = parseFloat($('#qafPrice').value) || 0;
+      const qty = parseFloat($('#qafQty').value) || 1;
+      const unit = $('#qafUnit').value || 'pack';
+
+      if (!name) return;
+
+      state.activeTrip.items.push({
+        id: 'ti-' + Date.now(),
+        name,
+        category,
+        price,
+        qty,
+        unit,
+        inCart: true
+      });
+
+      $('#qafName').value = '';
+      $('#qafPrice').value = '';
+      $('#qafQty').value = '1';
+      $('#qafName').focus();
+
+      saveState();
+      showToast(`Added "${name}" to cart!`);
+    });
+
+    // --- Finish Trip Button ---
+    $('#btnFinishTrip')?.addEventListener('click', () => {
+      if (!state.activeTrip) return;
+      const trip = state.activeTrip;
+      const inCartItems = trip.items.filter(i => i.inCart);
+      const inCartTotal = inCartItems.reduce((s, i) => s + (i.price * i.qty), 0);
+
+      // 1. Auto-record Expense
+      if (inCartTotal > 0) {
+        state.expenses.unshift({
+          id: 'exp-' + Date.now(),
+          store: trip.store,
+          date: getTodayStr(),
+          amount: inCartTotal,
+          method: 'UPI',
+          notes: `Completed Trip: ${trip.name} (${inCartItems.length} items)`,
+          receiptImage: null,
+          category: inCartItems[0]?.category || 'Other'
+        });
+      }
+
+      // 2. Auto-add to Pantry
+      inCartItems.forEach(item => {
+        state.pantry.push({
+          id: 'p-' + Date.now() + Math.random(),
+          name: item.name,
+          category: item.category,
+          location: item.category === 'Dairy & Eggs' || item.category === 'Vegetables' ? 'Fridge' : 'Pantry',
+          qty: item.qty,
+          unit: item.unit,
+          expiryDate: getTodayStr(item.category === 'Dairy & Eggs' ? 4 : 14),
+          isLowStock: false
+        });
+      });
+
+      // 3. Move to Past Trips
+      state.pastTrips.unshift({
+        id: trip.id,
+        name: trip.name,
+        store: trip.store,
+        budget: trip.budget,
+        totalCost: inCartTotal,
+        date: getTodayStr(),
+        itemCount: inCartItems.length
+      });
+
+      state.activeTrip = null;
+      saveState();
+      showToast(`Trip finished! ₹${inCartTotal} logged and items added to Pantry! 🎉`, 'success');
+    });
+
+    // --- Cancel Trip Button ---
+    $('#btnCancelTrip')?.addEventListener('click', () => {
+      if (!confirm('Are you sure you want to cancel this shopping trip?')) return;
+      state.activeTrip = null;
+      saveState();
+      showToast('Trip cancelled.', 'info');
+    });
+
+    // --- Log Expense Modal & Form ---
+    $('#btnOpenLogExpense')?.addEventListener('click', () => {
+      $('#expenseDate').value = getTodayStr();
+      $('#logExpenseModal').hidden = false;
+    });
+
+    let uploadedReceiptBase64 = null;
+    $('#expenseReceiptInput')?.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          uploadedReceiptBase64 = ev.target.result;
+          const preview = $('#expenseReceiptPreview');
+          if (preview) {
+            preview.src = uploadedReceiptBase64;
+            preview.parentElement.style.display = 'block';
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    $('#logExpenseForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const store = $('#expenseStore').value.trim() || 'Supermarket';
+      const date = $('#expenseDate').value || getTodayStr();
+      const amount = parseFloat($('#expenseAmount').value) || 0;
+      const method = $('#expenseMethod').value || 'UPI';
+      const category = $('#expenseCategory').value || 'Other';
+      const notes = $('#expenseNotes').value.trim();
+
+      if (amount <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+      }
+
+      state.expenses.unshift({
+        id: 'exp-' + Date.now(),
+        store,
+        date,
+        amount,
+        method,
+        category,
+        notes,
+        receiptImage: uploadedReceiptBase64
+      });
+
+      uploadedReceiptBase64 = null;
+      $('#logExpenseForm').reset();
+      const previewWrap = $('#expenseReceiptPreview')?.parentElement;
+      if (previewWrap) previewWrap.style.display = 'none';
+
+      saveState();
+      $('#logExpenseModal').hidden = true;
+      showToast(`Logged bill of ${money(amount)} for ${store}! 🧾`);
+    });
+
+    // --- Add Pantry Item Modal & Form ---
+    $('#btnOpenAddPantry')?.addEventListener('click', () => {
+      $('#pantryExpiryDate').value = getTodayStr(7);
+      $('#addPantryModal').hidden = false;
+    });
+
+    $('#addPantryForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = $('#pantryName').value.trim();
+      const category = $('#pantryCategory').value;
+      const location = $('#pantryLocation').value;
+      const qty = parseFloat($('#pantryQty').value) || 1;
+      const unit = $('#pantryUnit').value || 'units';
+      const expiryDate = $('#pantryExpiryDate').value || null;
+      const isLowStock = $('#pantryLowStock').checked;
+
+      if (!name) return;
+
+      state.pantry.unshift({
+        id: 'p-' + Date.now(),
+        name,
+        category,
+        location,
+        qty,
+        unit,
+        expiryDate,
+        isLowStock
+      });
+
+      $('#addPantryForm').reset();
+      saveState();
+      $('#addPantryModal').hidden = true;
+      showToast(`Added "${name}" to ${location}! 🥫`);
+    });
+
+    // --- Profile & Settings Form ---
+    $('#profileForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const newBudget = parseFloat($('#profMonthlyBudget').value) || 10000;
+      state.budget = newBudget;
+      state.user.name = $('#profName').value.trim() || state.user.name;
+      state.user.email = $('#profEmail').value.trim() || state.user.email;
+      saveState();
+      showToast('Budget and profile updated successfully! 💾');
+    });
+
+    // --- Reset Demo Data ---
+    $('#btnResetData')?.addEventListener('click', () => {
+      if (!confirm('Reset all groceries, bills, and budget to the original sample demo data?')) return;
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      saveState();
+      showToast('Demo data restored! 🎉');
+    });
+
+    // Initial render
+    renderApp();
+  });
+
+})();
+
+
+</script>
+</body>
+</html>
